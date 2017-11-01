@@ -40,7 +40,9 @@ void Generate_traps();
 
 int main(int argc, char **argv)
 {
+	srand (time(NULL));
 	generate_board();
+	Generate_traps();
 	Draw_board();
 	return 0;
 }
@@ -72,5 +74,23 @@ void Draw_board()
 /*********************Generate traps***********************************/
 void Generate_traps()
 {
-	cout << "Stub" << endl;
+	int number_of_traps = 10;
+	bool is_trap_set = false;
+	int x_coordinate = 0;
+	int y_coordinate = 0;
+	for( int i=0; i<number_of_traps; i++)
+	{
+		while( is_trap_set == false )
+		{
+			x_coordinate = rand()%8;
+			y_coordinate = rand()%8;
+			if( board[x_coordinate][y_coordinate] == '_' && !(x_coordinate ==0 && y_coordinate ==0))
+			{
+				board[x_coordinate][y_coordinate] = 'T';
+				is_trap_set = true;
+			}
+		}
+		is_trap_set = false;
+	}
+		
 }
