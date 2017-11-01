@@ -33,6 +33,7 @@ char board[8][8];
 
 void generate_board();
 void Draw_board();
+void Generate_traps();
 
 
 
@@ -67,4 +68,9 @@ void Draw_board()
 			cout << "_" << board[i][j] << "_|";
 		}
 	}
+}
+/*********************Generate traps***********************************/
+void Generate_traps()
+{
+	cout << "Stub" << endl;
 }
