@@ -35,7 +35,8 @@ char board[8][8];
 void generate_board();
 void Draw_board();
 void Generate_traps();
-void Player();
+void game_play();
+bool ifWin();
 
 
 
@@ -44,10 +45,16 @@ int main(int argc, char **argv)
 {
 	srand (time(NULL));
 	initscr();
+	if(has_colors() == false)
+	{	endwin();
+		printf("Your terminal does not support color\n");
+		exit(1);
+	}
+	init_pair(1, COLOR_RED, -1);
 	generate_board();
 	Generate_traps();
-	Player();
-	Draw_board();
+	game_play();
+	
 	getch();
 	endwin();
 	return 0;
@@ -67,15 +74,23 @@ void generate_board()
 /***********************Draw board*************************************/
 void Draw_board()
 {
-	
+	printw("Dungeon Crawl");
+	printw("\n\n");
 	for( int i=0; i<8; i++)
 	{
-		printw("\n\n");
+		printw("\n");
 		printw( "|");
 		for( int j=0; j<8; j++ )
 		{
 			printw("_");
-			printw("%c", board[i][j]);
+			if(board[i][j] == '_')
+			{	
+				attron(COLOR_PAIR(1));
+				printw("%c", board[i][j]);
+				attroff(COLOR_PAIR(1));
+			}
+			else
+				printw("%c", board[i][j]);
 			printw( "_|");
 		}
 	}
@@ -104,10 +119,18 @@ void Generate_traps()
 	}
 	
 }
-/*************************Player***************************************/
-void Player()
+/*************************GamePlay***************************************/
+void game_play()
 {
 	int x_pos = 0;
 	int y_pos = 0;
 	board[x_pos][y_pos] = 'G';
+	Draw_board();
+}
+/************************If win or lose********************************/
+bool ifWin( )
+{
+	
+		return true;
+
 }
