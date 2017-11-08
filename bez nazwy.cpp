@@ -27,6 +27,7 @@
 #include <term.h>
 #include <stdlib.h>
 #include <time.h>
+#include <ncurses.h>
 using namespace std;
 
 char board[8][8];
@@ -34,6 +35,7 @@ char board[8][8];
 void generate_board();
 void Draw_board();
 void Generate_traps();
+void Player();
 
 
 
@@ -41,9 +43,13 @@ void Generate_traps();
 int main(int argc, char **argv)
 {
 	srand (time(NULL));
+	initscr();
 	generate_board();
 	Generate_traps();
+	Player();
 	Draw_board();
+	getch();
+	endwin();
 	return 0;
 }
 
@@ -61,30 +67,34 @@ void generate_board()
 /***********************Draw board*************************************/
 void Draw_board()
 {
+	
 	for( int i=0; i<8; i++)
 	{
-		cout << endl;
-		cout << "|";
+		printw("\n\n");
+		printw( "|");
 		for( int j=0; j<8; j++ )
 		{
-			cout << "_" << board[i][j] << "_|";
+			printw("_");
+			printw("%c", board[i][j]);
+			printw( "_|");
 		}
 	}
 }
 /*********************Generate traps***********************************/
 void Generate_traps()
 {
-	int number_of_traps = 10;
+	int number_of_traps = 5;
 	bool is_trap_set = false;
 	int x_coordinate = 0;
 	int y_coordinate = 0;
+	board[7][7] = 'X';	
 	for( int i=0; i<number_of_traps; i++)
 	{
 		while( is_trap_set == false )
 		{
 			x_coordinate = rand()%8;
 			y_coordinate = rand()%8;
-			if( board[x_coordinate][y_coordinate] == '_' && !(x_coordinate ==0 && y_coordinate ==0))
+			if( board[x_coordinate][y_coordinate] == '_' && !((x_coordinate ==0 || x_coordinate == 1) && (y_coordinate ==0 || y_coordinate==1)))
 			{
 				board[x_coordinate][y_coordinate] = 'T';
 				is_trap_set = true;
@@ -92,5 +102,12 @@ void Generate_traps()
 		}
 		is_trap_set = false;
 	}
-		
+	
+}
+/*************************Player***************************************/
+void Player()
+{
+	int x_pos = 0;
+	int y_pos = 0;
+	board[x_pos][y_pos] = 'G';
 }
