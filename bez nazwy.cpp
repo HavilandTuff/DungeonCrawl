@@ -50,7 +50,10 @@ int main(int argc, char **argv)
 		printf("Your terminal does not support color\n");
 		exit(1);
 	}
-	init_pair(1, COLOR_RED, -1);
+	start_color();
+	init_pair(1, COLOR_GREEN, COLOR_BLACK); //Grass field/
+	init_pair(2, COLOR_RED, COLOR_BLACK); //Trap
+	init_pair(3, COLOR_BLUE, COLOR_BLACK); //Player
 	generate_board();
 	Generate_traps();
 	game_play();
@@ -74,6 +77,7 @@ void generate_board()
 /***********************Draw board*************************************/
 void Draw_board()
 {
+	
 	printw("Dungeon Crawl");
 	printw("\n\n");
 	for( int i=0; i<8; i++)
@@ -82,18 +86,29 @@ void Draw_board()
 		printw( "|");
 		for( int j=0; j<8; j++ )
 		{
+			attron(COLOR_PAIR(1));
 			printw("_");
-			if(board[i][j] == '_')
+			if(board[i][j] == 'G')
 			{	
-				attron(COLOR_PAIR(1));
+				attron(COLOR_PAIR(3));
 				printw("%c", board[i][j]);
-				attroff(COLOR_PAIR(1));
+				//attroff(COLOR_PAIR(3));
+			}
+			else if(board[i][j] == 'T')
+			{
+				attron(COLOR_PAIR(2));
+				printw("%c", board[i][j]);
+				//attroff(COLOR_PAIR(2));
 			}
 			else
-				printw("%c", board[i][j]);
-			printw( "_|");
+			printw("%c", board[i][j]);
+			attron(COLOR_PAIR(1));
+			printw( "_");
+			attroff(COLOR_PAIR(1));
+			printw( "|");
 		}
 	}
+	
 }
 /*********************Generate traps***********************************/
 void Generate_traps()
