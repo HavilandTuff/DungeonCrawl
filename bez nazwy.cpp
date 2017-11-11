@@ -36,8 +36,12 @@ void generate_board();
 void Draw_board();
 void Generate_traps();
 void game_play();
-bool ifWin();
-
+int ifWin(int x, int y);
+struct player_position
+{
+	int x_pos;
+	int y_pos;
+};
 
 
 
@@ -45,6 +49,10 @@ int main(int argc, char **argv)
 {
 	srand (time(NULL));
 	initscr();
+	keypad(stdscr, TRUE);
+	clear();
+	noecho();
+	cbreak();	
 	if(has_colors() == false)
 	{	endwin();
 		printf("Your terminal does not support color\n");
@@ -57,7 +65,6 @@ int main(int argc, char **argv)
 	generate_board();
 	Generate_traps();
 	game_play();
-	
 	getch();
 	endwin();
 	return 0;
@@ -108,7 +115,7 @@ void Draw_board()
 			printw( "|");
 		}
 	}
-	
+	printw("\n\n");
 }
 /*********************Generate traps***********************************/
 void Generate_traps()
@@ -137,15 +144,101 @@ void Generate_traps()
 /*************************GamePlay***************************************/
 void game_play()
 {
-	int x_pos = 0;
-	int y_pos = 0;
-	board[x_pos][y_pos] = 'G';
+	player_position Player;
+	Player.x_pos = 0;
+	Player.y_pos = 0;
+	int x_move = 0;
+	int y_move = 0;
+	board[Player.x_pos][Player.y_pos] = 'G';
 	Draw_board();
+	int move;
+	bool isMoveValid = false;
+	int win = -1;
+	while(win == -1)
+	{
+		while( isMoveValid == false )
+		{
+		move = getch();
+		switch(move)
+		{
+			case KEY_UP:
+				if(x_move - 1 < 0)
+				{
+					printw("Invalid move\n");
+					break;
+				}
+				else
+				{
+					x_move--;
+					isMoveValid = true;
+					break;
+				}
+			case KEY_DOWN:
+				if(x_move + 1 > 7)
+				{
+					printw("Invalid move\n");
+					break;
+				}
+				else
+				{
+					x_move++;
+					isMoveValid = true;
+					break;
+				}
+			case KEY_LEFT:
+				if(y_move - 1 < 0)
+				{
+					printw("Invalid move\n");
+					break;
+				}
+				else
+				{
+					y_move--;
+					isMoveValid = true;
+					break;
+				}
+			case KEY_RIGHT:
+				if(y_move + 1 > 7)
+				{
+					printw("Invalid move\n");
+					break;
+				}
+				else
+				{
+					y_move++;
+					isMoveValid = true;
+					break;
+				}
+			default:
+				{
+					printw("Invalid move\n");
+					break;
+				}
+		}
+		
+	}
+	isMoveValid = false;
+	win = ifWin(x_move, y_move);
+		if(win == -1)
+		{
+			board[Player.x_pos][Player.y_pos] = '_';
+			board[x_move][y_move] = 'G';
+			Player.x_pos = x_move;
+			Player.y_pos = y_move;
+			Draw_board();
+			clrtoeol();
+			refresh();
+		}
+	}
 }
 /************************If win or lose********************************/
-bool ifWin( )
+int ifWin( int x, int y)
 {
-	
-		return true;
+		if(board[x][y] == 'X')
+			return 0;
+		else if(board[x][y] == 'T')
+			return 1;
+		else
+			return -1;
 
 }
