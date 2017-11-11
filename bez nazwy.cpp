@@ -87,6 +87,8 @@ void Draw_board()
 	
 	printw("Dungeon Crawl");
 	printw("\n\n");
+	printw("Simple dungeon crawl game\n");
+	printw("You move with arrows avoiding (T)raps\n");
 	for( int i=0; i<8; i++)
 	{
 		printw("\n");
@@ -225,9 +227,24 @@ void game_play()
 			board[x_move][y_move] = 'G';
 			Player.x_pos = x_move;
 			Player.y_pos = y_move;
+			clear();
 			Draw_board();
 			clrtoeol();
 			refresh();
+		}
+		else if(win == 1)
+			printw("You loose!");
+		else
+		{
+			board[Player.x_pos][Player.y_pos] = '_';
+			board[x_move][y_move] = 'G';
+			Player.x_pos = x_move;
+			Player.y_pos = y_move;
+			clear();
+			Draw_board();
+			clrtoeol();
+			refresh();
+			printw("\nYou win!");
 		}
 	}
 }
