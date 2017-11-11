@@ -37,6 +37,7 @@ void Draw_board();
 void Generate_traps();
 void game_play();
 int ifWin(int x, int y);
+void monsters();
 struct player_position
 {
 	int x_pos;
@@ -258,4 +259,8 @@ int ifWin( int x, int y)
 		else
 			return -1;
 
+}
+/*********************Monsters*****************************************/
+void mosters()
+{
 }
