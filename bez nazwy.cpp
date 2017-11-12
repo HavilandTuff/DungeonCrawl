@@ -37,18 +37,23 @@ void Draw_board();
 void Generate_traps();
 void game_play();
 int ifWin(int x, int y);
-void monsters();
 struct player_position
 {
 	int x_pos;
 	int y_pos;
 };
-
-
-
+struct monster_position
+{
+	int x_pos;
+	int y_pos;
+};
+void generate_monsters( int monsters_number, monster_position monster[]);
+void move_monsters();
 int main(int argc, char **argv)
 {
 	srand (time(NULL));
+	int monsters_number = 5;
+	monster_position monster[monsters_number];
 	initscr();
 	keypad(stdscr, TRUE);
 	clear();
@@ -65,6 +70,7 @@ int main(int argc, char **argv)
 	init_pair(3, COLOR_BLUE, COLOR_BLACK); //Player
 	generate_board();
 	Generate_traps();
+	generate_monsters( monsters_number, monster);
 	game_play();
 	getch();
 	endwin();
@@ -261,6 +267,29 @@ int ifWin( int x, int y)
 
 }
 /*********************Monsters*****************************************/
-void mosters()
+void generate_monsters( int monsters_number, monster_position monster[])
+{
+	
+	bool is_monster_set = false;
+	int x_coordinate = 0;
+	int y_coordinate = 0;	
+	for( int i=0; i<monsters_number; i++)
+	{
+		while( is_monster_set == false )
+		{
+			x_coordinate = rand()%8;
+			y_coordinate = rand()%8;
+			if(board[x_coordinate][y_coordinate] == '_' && !((x_coordinate ==0 || x_coordinate == 1) && (y_coordinate ==0 || y_coordinate==1)))
+			{
+				board[x_coordinate][y_coordinate] = 'M';
+				monster[i].x_pos = x_coordinate;
+				monster[i].y_pos = y_coordinate;
+				is_monster_set = true;
+			}
+		}
+		is_monster_set = false;
+	}
+}
+void move_monsters()
 {
 }
