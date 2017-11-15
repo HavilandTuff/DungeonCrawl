@@ -236,14 +236,19 @@ void game_play()
 			board[x_move][y_move] = 'G';
 			Player.x_pos = x_move;
 			Player.y_pos = y_move;
+			clear();	
+			win = move_monsters(monsters_number, monster, win);
 			clear();
 			Draw_board();
-			move_monsters(monsters_number, monster, win);
 			clrtoeol();
 			refresh();
 		}
 		else if(win == 1)
+		{
+			clear();
+			Draw_board();
 			printw("You loose!");
+		}
 		else
 		{
 			board[Player.x_pos][Player.y_pos] = '_';
@@ -297,30 +302,47 @@ int move_monsters(int monsters_number, position monster[], int win)
 {
 	int xmove = 0;
 	int ymove = 0;
-	int direction = 0;
 	bool monster_moved = false;
 	for(int i=0; i<monsters_number; i++)
 	{
 		while(monster_moved == false)
 		{
-			direction = (rand()%2?0:1);
-			if(direction == 0)
-			xmove = (rand()%2?-1:1);
-			else
-			ymove = (rand()%2?-1:1);
-			if((monster[i].x_pos + xmove > 0 && monster[i].x_pos + xmove <7) && (monster[i].y_pos + ymove > 0 && monster[i].y_pos + ymove <7) )
+			if(rand()%2)
 			{
+			xmove = (rand()%2?-1:1);
+			}
+			else
+			{
+			ymove = (rand()%2?-1:1);
+			}
+			if((monster[i].x_pos + xmove >= 0 && monster[i].x_pos + xmove <=7) && (monster[i].y_pos + ymove >= 0 && monster[i].y_pos + ymove <=7) && 
+			(board[monster[i].x_pos+xmove][monster[i].y_pos+ymove] == '_' || board[monster[i].x_pos+xmove][monster[i].y_pos+ymove]=='G'))
+			{
+				if(board[monster[i].x_pos+xmove][monster[i].y_pos+ymove]=='G')
+				{
+					board[monster[i].x_pos][monster[i].y_pos] = '_';
+					monster[i].x_pos += xmove;
+					monster[i].y_pos += ymove;
+					board[monster[i].x_pos][monster[i].y_pos] = 'M';
+					xmove = 0;
+					ymove = 0;
+					monster_moved = true;
+					win = 1;
+				}
 			board[monster[i].x_pos][monster[i].y_pos] = '_';
 			monster[i].x_pos += xmove;
 			monster[i].y_pos += ymove;
 			board[monster[i].x_pos][monster[i].y_pos] = 'M';
+			xmove = 0;
+			ymove = 0;
 			monster_moved = true;
 			}
 			else
-			printw("Monster hit wall!");
+			{
+			xmove = 0;
+			ymove = 0;
+			}
 		}
-		printw("Monster %d\n x=%d \ny=%d\n\n", i, monster[i].x_pos, monster[i].y_pos);
-		
 		monster_moved = false;
 	}
 	return win;
