@@ -230,26 +230,7 @@ void game_play()
 		}
 	isMoveValid = false;
 	win = ifWin(x_move, y_move);
-		if(win == -1)
-		{
-			board[Player.x_pos][Player.y_pos] = '_';
-			board[x_move][y_move] = 'G';
-			Player.x_pos = x_move;
-			Player.y_pos = y_move;
-			clear();	
-			win = move_monsters(monsters_number, monster, win);
-			clear();
-			Draw_board();
-			clrtoeol();
-			refresh();
-		}
-		else if(win == 1)
-		{
-			clear();
-			Draw_board();
-			printw("You loose!");
-		}
-		else
+		if(win == 0)
 		{
 			board[Player.x_pos][Player.y_pos] = '_';
 			board[x_move][y_move] = 'G';
@@ -259,7 +240,35 @@ void game_play()
 			Draw_board();
 			printw("\nYou win!");
 			clrtoeol();
-			refresh();
+			refresh();			
+		}
+		else if(win == 1)
+		{
+			board[Player.x_pos][Player.y_pos] = '_';
+			clear();
+			Draw_board();
+			printw("You found trap. Game over!");
+		}
+		else
+		{
+			board[Player.x_pos][Player.y_pos] = '_';
+			board[x_move][y_move] = 'G';
+			Player.x_pos = x_move;
+			Player.y_pos = y_move;	
+			win = move_monsters(monsters_number, monster, win);
+			if(win == 1)
+			{
+				clear();
+				Draw_board();
+				printw("Monster ate you! Game over!");
+			}
+			else
+			{
+				clear();
+				Draw_board();
+				clrtoeol();
+				refresh();
+			}
 		}
 	}
 }
@@ -319,16 +328,7 @@ int move_monsters(int monsters_number, position monster[], int win)
 			(board[monster[i].x_pos+xmove][monster[i].y_pos+ymove] == '_' || board[monster[i].x_pos+xmove][monster[i].y_pos+ymove]=='G'))
 			{
 				if(board[monster[i].x_pos+xmove][monster[i].y_pos+ymove]=='G')
-				{
-					board[monster[i].x_pos][monster[i].y_pos] = '_';
-					monster[i].x_pos += xmove;
-					monster[i].y_pos += ymove;
-					board[monster[i].x_pos][monster[i].y_pos] = 'M';
-					xmove = 0;
-					ymove = 0;
-					monster_moved = true;
 					win = 1;
-				}
 			board[monster[i].x_pos][monster[i].y_pos] = '_';
 			monster[i].x_pos += xmove;
 			monster[i].y_pos += ymove;
