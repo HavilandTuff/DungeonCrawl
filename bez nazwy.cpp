@@ -87,7 +87,7 @@ void Draw_board()
 	printw("Dungeon Crawl");
 	printw("\n\n");
 	printw("Simple dungeon crawl game\n");
-	printw("You move with arrows avoiding (T)raps\n");
+	printw("You move with arrows avoiding (T)raps and (M)onsters\n");
 	for( int i=0; i<8; i++)
 	{
 		printw("\n");
